@@ -1,0 +1,352 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abhinav Semwal | Computer Science & Engineering Portfolio</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glow-effect {
+      box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300 min-h-screen">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+          AS
+        </div>
+        <div>
+          <span class="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors">Abhinav Semwal</span>
+          <span class="block text-[11px] text-slate-400 font-mono tracking-wider">CS UNDERGRADUATE</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium text-slate-300">
+        <a href="#about" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">About</a>
+        <a href="#education" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Education</a>
+        <a href="#skills" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Skills</a>
+        <a href="#projects" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Project</a>
+        <a href="#achievements" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Achievements</a>
+        <a href="#certifications" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Certifications</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="hidden sm:flex items-center gap-3">
+        <a href="#contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition-all shadow-md shadow-indigo-600/30">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+          <span>Get in Touch</span>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <div class="flex md:hidden items-center gap-2">
+        <button id="mobileMenuBtn" aria-label="Toggle menu" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
+          <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-2">
+      <a href="#about" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">About</a>
+      <a href="#education" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Education</a>
+      <a href="#skills" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Skills</a>
+      <a href="#projects" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Projects</a>
+      <a href="#achievements" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Achievements</a>
+      <a href="#certifications" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Certifications</a>
+      <a href="#contact" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-indigo-400 font-semibold hover:bg-slate-800">Contact Abhinav</a>
+    </div>
+  </nav>
+
+  <main class="pt-20 sm:pt-24 overflow-hidden">
+    
+    <section id="hero" class="relative py-16 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Ambient Glow Orbs -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] sm:w-[650px] h-[350px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
+      <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+      <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+        
+        <!-- Status Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs sm:text-sm text-slate-300 font-medium mb-6 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>B.Tech CSE Undergrad @ Graphic Era University</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-indigo-400 font-mono">Dehradun, India</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+          Hi, I'm <span class="gradient-text">Abhinav Semwal</span>.<br />
+          Engineering Software with Precision.
+        </h1>
+
+        <!-- Subheading -->
+        <p class="text-base sm:text-xl text-slate-400 max-w-2xl leading-relaxed mb-8">
+          Passionate Computer Science undergraduate with a stellar academic track record 
+          (<span class="text-indigo-300 font-semibold font-mono">9.56 CGPA</span>), 
+          foundational mastery in <span class="text-slate-200">C, Java & C++</span>, competitive quizzing champion, and AI enthusiast.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 w-full max-w-md">
+          <a href="#projects" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 active:scale-95">
+            <i data-lucide="code-2" class="w-4 h-4"></i>
+            <span>Explore Projects</span>
+          </a>
+          <a href="mailto:absemwal2007@gmail.com" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 active:scale-95">
+            <i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i>
+            <span>Email Me</span>
+          </a>
+          <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 border border-slate-800/80 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2">
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+            <span>Verified Profile</span>
+          </a>
+        </div>
+
+        <!-- Fast Stats Metric Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl">
+          <div class="glass-card rounded-2xl p-5 text-center border border-slate-800 hover:border-slate-700 transition-colors">
+            <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400 font-mono">9.56</div>
+            <div class="text-xs sm:text-sm text-slate-400 mt-1">B.Tech CGPA</div>
+          </div>
+          <div class="glass-card rounded-2xl p-5 text-center border border-slate-800 hover:border-slate-700 transition-colors">
+            <div class="text-2xl sm:text-3xl font-extrabold text-purple-400 font-mono">98% / 96%</div>
+            <div class="text-xs sm:text-sm text-slate-400 mt-1">ICSE / ISC Scores</div>
+          </div>
+          <div class="glass-card rounded-2xl p-5 text-center border border-slate-800 hover:border-slate-700 transition-colors">
+            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">5× 1st</div>
+            <div class="text-xs sm:text-sm text-slate-400 mt-1">Quiz Victories</div>
+          </div>
+          <div class="glass-card rounded-2xl p-5 text-center border border-slate-800 hover:border-slate-700 transition-colors">
+            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">4 Certs</div>
+            <div class="text-xs sm:text-sm text-slate-400 mt-1">IBM & Google AI</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="about" class="py-16 sm:py-24 border-t border-slate-900 bg-slate-950/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div class="lg:col-span-5 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-xs font-mono uppercase tracking-wider">
+              Profile Overview
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+              Engineering with curiosity, discipline, and analytical rigor.
+            </h2>
+            <p class="text-slate-400 text-base leading-relaxed">
+              I am a first-year Computer Science & Engineering undergraduate at Graphic Era Deemed To Be University, Dehradun. With a rigorous background rooted in ICSE/ISC science and math education, I concentrate on building robust algorithmic foundations using <span class="text-slate-200">C, Java, and C++</span>.
+            </p>
+            <p class="text-slate-400 text-base leading-relaxed">
+              Beyond standard coursework, I am an active competitive quizzer with numerous 1st-position titles in inter-school trivia and group discussions. Concurrently, I expand my domain expertise in applied Artificial Intelligence and Prompt Engineering via Coursera programs from IBM and Google.
+            </p>
+
+            <div class="pt-2 flex flex-col sm:flex-row gap-4 text-sm font-mono text-slate-300">
+              <div class="flex items-center gap-2">
+                <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400"></i>
+                <span>Dehradun, Uttarakhand, India</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i>
+                <a href="tel:+917017892829" class="hover:text-indigo-300 transition-colors">+91 7017892829</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7">
+            <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
+              <h3 class="text-xl font-semibold text-white flex items-center gap-2">
+                <i data-lucide="terminal" class="w-5 h-5 text-indigo-400"></i>
+                Quick Engineering Snapshot
+              </h3>
+              
+              <div class="space-y-4 text-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
+                  <span class="text-slate-400">Current Academic Standing</span>
+                  <span class="font-semibold text-indigo-300 font-mono">B.Tech CSE (9.56 CGPA)</span>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
+                  <span class="text-slate-400">Core Paradigms</span>
+                  <span class="text-slate-200 font-mono">Procedural, OOP, Low-Level Logic</span>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
+                  <span class="text-slate-400">Primary Languages</span>
+                  <span class="text-slate-200 font-mono">C, Java, C++</span>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-1">
+                  <span class="text-slate-400">Tooling & Environment</span>
+                  <span class="text-slate-200 font-mono">VS Code, Git, GitHub, CLI</span>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <span class="text-slate-400">Special Interests</span>
+                  <span class="text-slate-200 font-mono">Generative AI, Sports Trivia, Algorithms</span>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+                    <i data-lucide="file-check" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-white">Full Verified Profile</div>
+                    <div class="text-xs text-slate-400 font-mono">shorturl.at/XmhQ3</div>
+                  </div>
+                </div>
+                <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                  <span>Visit</span>
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-xs font-mono uppercase tracking-wider mb-3">
+          Academic Track Record
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Education & Scholastic Excellence</h2>
+        <p class="text-slate-400 mt-3 text-base">Demonstrated academic consistency and distinction across all levels of study.</p>
+      </div>
+
+      <div class="relative max-w-4xl mx-auto">
+        <!-- Vertical timeline spine -->
+        <div class="absolute left-4 sm:left-1/2 top-4 bottom-4 -translate-x-1/2 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-slate-800"></div>
+
+        <div class="space-y-12">
+          
+          <!-- Item 1: Graphic Era University -->
+          <div class="relative flex flex-col sm:flex-row items-start group">
+            <div class="hidden sm:block sm:w-1/2 sm:pr-12 text-right">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium text-indigo-300 bg-indigo-950 border border-indigo-800">
+                2025 – Present
+              </span>
+              <h3 class="text-xl font-bold text-white mt-2">Graphic Era Deemed To Be University</h3>
+              <p class="text-slate-400 text-sm">Dehradun, Uttarakhand</p>
+            </div>
+            
+            <!-- Timeline Center Node -->
+            <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-indigo-500 flex items-center justify-center z-10 shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
+              <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-400"></i>
+            </div>
+
+            <!-- Content Card -->
+            <div class="pl-12 sm:pl-12 sm:w-1/2">
+              <div class="sm:hidden mb-2">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium text-indigo-300 bg-indigo-950 border border-indigo-800">
+                  2025 – Present
+                </span>
+                <h3 class="text-lg font-bold text-white mt-2">Graphic Era Deemed To Be University</h3>
+                <p class="text-slate-400 text-xs">Dehradun, Uttarakhand</p>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition-all duration-300">
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                  <h4 class="font-semibold text-white">B.Tech in Computer Science & Engineering</h4>
+                  <span class="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-300 font-mono font-bold text-sm">
+                    9.56 / 10 CGPA
+                  </span>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                  Focusing on core computing foundations including Data Structures, Algorithms, Computer Organization, and Software Construction with high scholastic ranking.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: St. Jude's School - Class XII (ISC) -->
+          <div class="relative flex flex-col sm:flex-row items-start group">
+            <div class="pl-12 sm:pl-0 sm:w-1/2 sm:pr-12 sm:text-right order-2 sm:order-1">
+              <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-pur
