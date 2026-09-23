@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -11,7 +10,7 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- Inter Font -->
+  <!-- Inter & JetBrains Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -74,6 +73,7 @@
       border: 1px solid rgba(226, 232, 240, 0.8);
     }
 
+    /* Fixed gradient-text with standard background-clip to prevent VS Code lint warning */
     .gradient-text {
       background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
       -webkit-background-clip: text;
@@ -84,10 +84,32 @@
     .glow-effect {
       box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.35);
     }
+
+    /* Print styles specifically for clean PDF export of resume */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #resumePrintArea, #resumePrintArea * {
+        visibility: visible;
+      }
+      #resumePrintArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #000 !important;
+        background: #fff !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300 min-h-screen">
 
+  <!-- Fixed Navigation Bar -->
   <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
       
@@ -112,16 +134,27 @@
         <a href="#certifications" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all">Certifications</a>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Action Buttons at Top Right (Includes Resume Button) -->
       <div class="hidden sm:flex items-center gap-3">
+        <!-- Prominent Top-Right Resume Button -->
+        <button onclick="openResumeModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-indigo-300 bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-700/60 active:scale-95 transition-all shadow-sm hover:shadow-indigo-500/20" title="View & Download Resume">
+          <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i>
+          <span>Resume</span>
+          <span class="px-1.5 py-0.2 text-[10px] uppercase font-mono rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">CV</span>
+        </button>
+
         <a href="#contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition-all shadow-md shadow-indigo-600/30">
           <i data-lucide="mail" class="w-4 h-4"></i>
-          <span>Get in Touch</span>
+          <span>Contact</span>
         </a>
       </div>
 
       <!-- Mobile Menu Toggle Button -->
       <div class="flex md:hidden items-center gap-2">
+        <button onclick="openResumeModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-300 bg-indigo-950 border border-indigo-800">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Resume</span>
+        </button>
         <button id="mobileMenuBtn" aria-label="Toggle menu" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
           <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
         </button>
@@ -136,12 +169,17 @@
       <a href="#projects" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Projects</a>
       <a href="#achievements" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Achievements</a>
       <a href="#certifications" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Certifications</a>
-      <a href="#contact" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-indigo-400 font-semibold hover:bg-slate-800">Contact Abhinav</a>
+      <button onclick="openResumeModal(); document.getElementById('mobileMenu').classList.add('hidden');" class="w-full text-left px-3 py-2.5 rounded-lg text-base font-semibold text-indigo-400 hover:bg-slate-800 flex items-center gap-2">
+        <i data-lucide="file-text" class="w-4 h-4"></i>
+        <span>View / Download Resume (PDF)</span>
+      </button>
+      <a href="#contact" class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-white bg-indigo-600 font-semibold text-center mt-2">Contact Abhinav</a>
     </div>
   </nav>
 
   <main class="pt-20 sm:pt-24 overflow-hidden">
     
+    <!-- Hero Section -->
     <section id="hero" class="relative py-16 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Ambient Glow Orbs -->
       <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] sm:w-[650px] h-[350px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
@@ -170,18 +208,26 @@
           foundational mastery in <span class="text-slate-200">C, Java & C++</span>, competitive quizzing champion, and AI enthusiast.
         </p>
 
-        <!-- CTAs -->
-        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 w-full max-w-md">
-          <a href="#projects" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 active:scale-95">
-            <i data-lucide="code-2" class="w-4 h-4"></i>
+        <!-- CTAs with Resume Options -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12 w-full max-w-2xl">
+          <!-- Resume View Button in Hero -->
+          <button onclick="openResumeModal()" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 active:scale-95 group">
+            <i data-lucide="file-down" class="w-4 h-4 group-hover:-translate-y-0.5 transition-transform"></i>
+            <span>View / Download Resume</span>
+          </button>
+
+          <a href="#projects" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 active:scale-95">
+            <i data-lucide="code-2" class="w-4 h-4 text-indigo-400"></i>
             <span>Explore Projects</span>
           </a>
-          <a href="mailto:absemwal2007@gmail.com" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 active:scale-95">
+          
+          <a href="mailto:absemwal2007@gmail.com" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 border border-slate-800/80 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 active:scale-95">
             <i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i>
             <span>Email Me</span>
           </a>
-          <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 border border-slate-800/80 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2">
-            <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+          
+          <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/50 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800/80 font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
             <span>Verified Profile</span>
           </a>
         </div>
@@ -209,6 +255,7 @@
       </div>
     </section>
 
+    <!-- About Section -->
     <section id="about" class="py-16 sm:py-24 border-t border-slate-900 bg-slate-950/40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -241,9 +288,15 @@
 
           <div class="lg:col-span-7">
             <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-              <h3 class="text-xl font-semibold text-white flex items-center gap-2">
-                <i data-lucide="terminal" class="w-5 h-5 text-indigo-400"></i>
-                Quick Engineering Snapshot
+              <h3 class="text-xl font-semibold text-white flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="terminal" class="w-5 h-5 text-indigo-400"></i>
+                  Quick Engineering Snapshot
+                </span>
+                <button onclick="openResumeModal()" class="text-xs font-mono text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                  <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                  <span>Full Resume &rarr;</span>
+                </button>
               </h3>
               
               <div class="space-y-4 text-sm">
@@ -292,6 +345,7 @@
       </div>
     </section>
 
+    <!-- Education Section -->
     <section id="education" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-xs font-mono uppercase tracking-wider mb-3">
@@ -349,4 +403,1085 @@
           <!-- Item 2: St. Jude's School - Class XII (ISC) -->
           <div class="relative flex flex-col sm:flex-row items-start group">
             <div class="pl-12 sm:pl-0 sm:w-1/2 sm:pr-12 sm:text-right order-2 sm:order-1">
-              <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-pur
+              <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition-all duration-300">
+                <div class="flex items-center justify-between sm:justify-end flex-wrap gap-2 mb-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-indigo-950/80 border border-indigo-800 text-indigo-300 font-mono font-bold text-sm order-2 sm:order-1">
+                    96%
+                  </span>
+                  <h4 class="font-semibold text-white order-1 sm:order-2">Senior School Certificate (Class XII)</h4>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                  Completed Indian School Certificate (ISC) board examinations with Distinction across Science, Mathematics, and Computer Science streams.
+                </p>
+              </div>
+            </div>
+
+            <!-- Timeline Center Node -->
+            <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-purple-500 flex items-center justify-center z-10 shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform">
+              <i data-lucide="award" class="w-4 h-4 text-purple-400"></i>
+            </div>
+
+            <div class="pl-12 sm:pl-12 sm:w-1/2 order-1 sm:order-2 mb-2 sm:mb-0">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium text-purple-300 bg-purple-950 border border-purple-800">
+                Graduated 2025
+              </span>
+              <h3 class="text-xl font-bold text-white mt-2">St. Jude's School – ISC</h3>
+              <p class="text-slate-400 text-sm">Council for the Indian School Certificate Examinations</p>
+            </div>
+          </div>
+
+          <!-- Item 3: St. Jude's School - Class X (ICSE) -->
+          <div class="relative flex flex-col sm:flex-row items-start group">
+            <div class="hidden sm:block sm:w-1/2 sm:pr-12 text-right">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium text-amber-300 bg-amber-950 border border-amber-800">
+                Completed 2023
+              </span>
+              <h3 class="text-xl font-bold text-white mt-2">St. Jude's School – ICSE</h3>
+              <p class="text-slate-400 text-sm">Secondary School Examination</p>
+            </div>
+
+            <!-- Timeline Center Node -->
+            <div class="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-amber-500 flex items-center justify-center z-10 shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform">
+              <i data-lucide="star" class="w-4 h-4 text-amber-400"></i>
+            </div>
+
+            <div class="pl-12 sm:pl-12 sm:w-1/2">
+              <div class="sm:hidden mb-2">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium text-amber-300 bg-amber-950 border border-amber-800">
+                  Completed 2023
+                </span>
+                <h3 class="text-lg font-bold text-white mt-2">St. Jude's School – ICSE</h3>
+                <p class="text-slate-400 text-xs">Secondary School Examination</p>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-amber-500/50 transition-all duration-300">
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                  <h4 class="font-semibold text-white">Secondary School Certificate (Class X)</h4>
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-950/80 border border-amber-800 text-amber-300 font-mono font-bold text-sm">
+                    98%
+                  </span>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                  Earned an outstanding 98% aggregate in ICSE board examinations, demonstrating early mastery of mathematics, logical reasoning, and computer applications.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 sm:py-24 border-t border-slate-900 bg-slate-950/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-xs font-mono uppercase tracking-wider mb-3">
+            Technical Arsenal
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Languages & Developer Tools</h2>
+          <p class="text-slate-400 mt-3 text-base">Key languages, workflows, and developer environments utilized in my daily development routine.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          
+          <!-- C Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                C
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">Core Language</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">C Programming</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Pointer arithmetic, memory management (`malloc`, `free`), standard I/O streams, modular structures, and algorithmic implementation.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>Used in: Unit Convertor Project</span>
+            </div>
+          </div>
+
+          <!-- Java Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                <i data-lucide="coffee" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">OOP Core</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Java</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Object-oriented design patterns, encapsulation, inheritance, polymorphism, abstract classes, collections, and robust exception handling.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>School Distinction & B.Tech Curricula</span>
+            </div>
+          </div>
+
+          <!-- C++ Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold text-base group-hover:scale-110 transition-transform font-mono">
+                C++
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">High Performance</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">C++</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Standard Template Library (STL vectors, maps, algorithms), performance-focused programming, reference semantics, and computational problem solving.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>DSA & Competitive Foundations</span>
+            </div>
+          </div>
+
+          <!-- VS Code Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="code" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">Primary IDE</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">VS Code</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Configured workspace with GCC/G++ build tasks, debugging configurations, linting, syntax highlighting, and terminal integration.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>Daily Development Driver</span>
+            </div>
+          </div>
+
+          <!-- Git & GitHub Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="git-branch" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">VCS & Collaboration</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">GitHub & Git</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Version control management, branching, commit discipline, remote repositories, markdown documentation, and GitHub Pages hosting.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>Ready for Team Collaboration</span>
+            </div>
+          </div>
+
+          <!-- Problem Solving / Quizzing Card -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 rounded-md bg-slate-800 text-slate-300">Cognitive Aptitude</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Analytical & Logic Skills</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Rapid data synthesis, factual accuracy under pressure, verbal clarity during group discussions, and systematic troubleshooting.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-xs text-indigo-400 font-mono">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>Tested via 5+ Quiz Championships</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-950/80 border border-indigo-800/50 text-indigo-300 text-xs font-mono uppercase tracking-wider mb-3">
+          Applied Engineering
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Featured Project</h2>
+        <p class="text-slate-400 mt-3 text-base">Showcasing real projects built with foundational programming languages, accompanied by an interactive live demo.</p>
+      </div>
+
+      <!-- Featured Project Card -->
+      <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 glow-effect max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Left: Project Narrative -->
+          <div class="lg:col-span-6 space-y-5">
+            <div class="flex items-center gap-3 flex-wrap">
+              <span class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-950 text-indigo-300 border border-indigo-800">
+                Feb 2026 – May 2026
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300">
+                Language: C
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300">
+                IDE: VS Code
+              </span>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-bold text-white">Unit Convertor Project</h3>
+
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              A comprehensive utility engineered in C designed to compute conversions across multiple physical and economic quantities including <strong class="text-white">Length, Mass, Weight, and Currency</strong>.
+            </p>
+
+            <div class="space-y-3 pt-2">
+              <div class="flex items-start gap-3 text-sm text-slate-300">
+                <div class="p-1 rounded bg-indigo-500/20 text-indigo-400 mt-0.5">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <span><strong>Multi-Dimensional Conversion:</strong> Seamlessly handles transformation equations across metric and imperial systems.</span>
+              </div>
+              <div class="flex items-start gap-3 text-sm text-slate-300">
+                <div class="p-1 rounded bg-indigo-500/20 text-indigo-400 mt-0.5">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <span><strong>Precision & Robust Inputs:</strong> Built with robust numeric boundary checking, float precision arithmetic, and input sanitization.</span>
+              </div>
+              <div class="flex items-start gap-3 text-sm text-slate-300">
+                <div class="p-1 rounded bg-indigo-500/20 text-indigo-400 mt-0.5">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </div>
+                <span><strong>Modular Architecture:</strong> Function prototypes separated by physical domains for easy expansion and testing.</span>
+              </div>
+            </div>
+
+            <div class="pt-4 flex flex-wrap gap-2 font-mono text-xs text-slate-400">
+              <span class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">#C_Programming</span>
+              <span class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">#Modular_Design</span>
+              <span class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">#VSCode</span>
+              <span class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">#CLI</span>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Live Demo Tool reproducing the Project Logic -->
+          <div class="lg:col-span-6 bg-slate-900/90 rounded-2xl p-6 border border-slate-800/90 shadow-2xl">
+            <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="ml-2 text-xs font-mono text-slate-400 font-semibold">live_unit_convertor.c (Web Port)</span>
+              </div>
+              <span class="text-[11px] font-mono text-indigo-400 bg-indigo-950/80 px-2 py-0.5 rounded">Interactive Demo</span>
+            </div>
+
+            <!-- Category Selector Tabs -->
+            <div class="grid grid-cols-4 gap-1 p-1 bg-slate-950 rounded-xl mb-5 text-xs font-medium text-slate-400">
+              <button onclick="setCategory('length')" id="tab-length" class="category-tab py-2 rounded-lg bg-indigo-600 text-white font-semibold transition-all">Length</button>
+              <button onclick="setCategory('mass')" id="tab-mass" class="category-tab py-2 rounded-lg hover:text-white transition-all">Mass</button>
+              <button onclick="setCategory('currency')" id="tab-currency" class="category-tab py-2 rounded-lg hover:text-white transition-all">Currency</button>
+              <button onclick="setCategory('temp')" id="tab-temp" class="category-tab py-2 rounded-lg hover:text-white transition-all">Temp</button>
+            </div>
+
+            <!-- Dynamic Conversion Form -->
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">INPUT VALUE</label>
+                <input type="number" id="convertInput" value="100" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono text-base focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Enter number..." />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1">FROM</label>
+                  <select id="fromUnit" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-indigo-500">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1">TO</label>
+                  <select id="toUnit" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-indigo-500">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Swap Button -->
+              <div class="flex justify-center -my-1">
+                <button onclick="swapUnits()" type="button" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Swap units">
+                  <i data-lucide="arrow-up-down" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <!-- Output Display -->
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80">
+                <div class="text-xs font-mono text-slate-400">CALCULATED RESULT</div>
+                <div id="convertOutput" class="text-2xl font-bold font-mono text-emerald-400 mt-1 truncate">
+                  --
+                </div>
+                <div id="conversionFormula" class="text-[11px] text-slate-500 font-mono mt-1">
+                  1 Meter = 3.28084 Feet
+                </div>
+              </div>
+
+              <div class="text-center pt-1">
+                <span class="text-[11px] text-slate-500">Replicating standard C logic (double precision arithmetic)</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="py-16 sm:py-24 border-t border-slate-900 bg-slate-950/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-950/80 border border-amber-800/50 text-amber-300 text-xs font-mono uppercase tracking-wider mb-3">
+            Honors & Distinctions
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Scholastic & Co-Scholastic Victories</h2>
+          <p class="text-slate-400 mt-3 text-base">
+            Demonstrated quick-thinking, team leadership, and sports/general trivia prowess across prominent inter-school platforms.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Achievement 1 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i data-lucide="trophy" class="w-6 h-6"></i>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-amber-950 border border-amber-700/60 text-amber-300">
+                  1st Position
+                </span>
+              </div>
+              <h3 class="text-lg font-bold text-white leading-snug">Colonel Brown Inter School Sports Quiz</h3>
+              <p class="text-slate-400 text-sm mt-2">
+                Consecutive championship wins defending top honors across two intense academic cycles.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Years</span>
+              <span class="text-amber-400 font-semibold">2023 & 2024</span>
+            </div>
+          </div>
+
+          <!-- Achievement 2 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i data-lucide="trophy" class="w-6 h-6"></i>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-amber-950 border border-amber-700/60 text-amber-300">
+                  1st Position
+                </span>
+              </div>
+              <h3 class="text-lg font-bold text-white leading-snug">Quintessence Inter School Quiz</h3>
+              <p class="text-slate-400 text-sm mt-2">
+                Secured first prize competing against prominent regional institutions in general knowledge and analytical rounds.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Year</span>
+              <span class="text-amber-400 font-semibold">2024</span>
+            </div>
+          </div>
+
+          <!-- Achievement 3 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i data-lucide="trophy" class="w-6 h-6"></i>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-amber-950 border border-amber-700/60 text-amber-300">
+                  1st Position
+                </span>
+              </div>
+              <h3 class="text-lg font-bold text-white leading-snug">Llewelyn Inter School Quiz</h3>
+              <p class="text-slate-400 text-sm mt-2">
+                Outperformed multi-school delegations through lightning rapid-fire and critical reasoning quiz segments.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Year</span>
+              <span class="text-amber-400 font-semibold">2024</span>
+            </div>
+          </div>
+
+          <!-- Achievement 4 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <i data-lucide="trophy" class="w-6 h-6"></i>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-amber-950 border border-amber-700/60 text-amber-300">
+                  1st Position
+                </span>
+              </div>
+              <h3 class="text-lg font-bold text-white leading-snug">Spectrum Inter School Quiz</h3>
+              <p class="text-slate-400 text-sm mt-2">
+                Claimed 1st place in broad-discipline trivia, scientific phenomena, and current affairs.
+              </p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Year</span>
+              <span class="text-amber-400 font-semibold">2024</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Co-Scholastic Callout -->
+        <div class="mt-8 glass-card rounded-2xl p-6 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-400">
+              <i data-lucide="messages-square" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h4 class="text-base font-semibold text-white">Group Discussions & Debate Forums</h4>
+              <p class="text-sm text-slate-400">Regular speaker and delegate in inter-school and intra-school group discussions.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-indigo-300 bg-indigo-950/60 px-3 py-1.5 rounded-lg border border-indigo-900 whitespace-nowrap">
+            Public Speaking & Discourse
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-950/80 border border-blue-800/50 text-blue-300 text-xs font-mono uppercase tracking-wider mb-3">
+          Verified Credentials
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Technical Certifications</h2>
+        <p class="text-slate-400 mt-3 text-base">Specialized online credentials acquired through industry leaders IBM and Google via Coursera.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        
+        <!-- Cert 1 -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all group">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs shrink-0">
+                IBM
+              </div>
+              <div>
+                <span class="text-xs font-mono text-blue-400">IBM via Coursera</span>
+                <h3 class="text-base font-bold text-white group-hover:text-blue-300 transition-colors">
+                  Introduction to Artificial Intelligence
+                </h3>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono shrink-0">Verified</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+            Understanding fundamental AI concepts, machine learning taxonomies, neural networks, ethics, and contemporary enterprise applications.
+          </p>
+        </div>
+
+        <!-- Cert 2 -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all group">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs shrink-0">
+                IBM
+              </div>
+              <div>
+                <span class="text-xs font-mono text-blue-400">IBM via Coursera</span>
+                <h3 class="text-base font-bold text-white group-hover:text-blue-300 transition-colors">
+                  Generative AI: Introduction and Applications
+                </h3>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono shrink-0">Verified</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+            Exploration of Foundation Models, LLM architectures, diffusion models, and real-world generative transformation paradigms.
+          </p>
+        </div>
+
+        <!-- Cert 3 -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-blue-500/50 transition-all group">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs shrink-0">
+                IBM
+              </div>
+              <div>
+                <span class="text-xs font-mono text-blue-400">IBM via Coursera</span>
+                <h3 class="text-base font-bold text-white group-hover:text-blue-300 transition-colors">
+                  Generative AI: Prompt Engineering Basics
+                </h3>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono shrink-0">Verified</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+            Mastery of effective prompt formatting techniques, zero-shot/few-shot prompting, persona constraints, and hallucination reduction.
+          </p>
+        </div>
+
+        <!-- Cert 4 -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-emerald-500/50 transition-all group">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+                G
+              </div>
+              <div>
+                <span class="text-xs font-mono text-emerald-400">Google via Coursera</span>
+                <h3 class="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  Google AI Essentials
+                </h3>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono shrink-0">Verified</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+            Comprehensive foundations in leveraging modern AI tools responsibly to optimize workflows, ideate, and engineer solutions.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 sm:py-24 border-t border-slate-900 bg-slate-950/60 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 sm:p-12 border border-slate-800 shadow-2xl relative overflow-hidden">
+          
+          <!-- Subtle corner accent -->
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <span class="text-xs font-mono uppercase tracking-widest text-indigo-400">Connect Directly</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Let's Connect & Collaborate</h2>
+            <p class="text-slate-400 text-sm sm:text-base mt-3">
+              Whether you want to discuss engineering, student projects, quiz trivia, or potential technical internships, feel free to reach out.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            
+            <!-- Email Action Card -->
+            <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+                <i data-lucide="mail" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs text-slate-400 font-mono">Email Address</span>
+              <a href="mailto:absemwal2007@gmail.com" class="text-sm font-semibold text-white hover:text-indigo-400 mt-1 truncate max-w-full">
+                absemwal2007@gmail.com
+              </a>
+              <button onclick="copyToClipboard('absemwal2007@gmail.com', this)" class="mt-3 text-xs font-mono text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copy Email</span>
+              </button>
+            </div>
+
+            <!-- Phone Action Card -->
+            <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-3">
+                <i data-lucide="phone-call" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs text-slate-400 font-mono">Phone Direct</span>
+              <a href="tel:+917017892829" class="text-sm font-semibold text-white hover:text-purple-400 mt-1">
+                +91 7017892829
+              </a>
+              <button onclick="copyToClipboard('+917017892829', this)" class="mt-3 text-xs font-mono text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copy Phone</span>
+              </button>
+            </div>
+
+            <!-- Profile Action Card -->
+            <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+                <i data-lucide="globe" class="w-6 h-6"></i>
+              </div>
+              <span class="text-xs text-slate-400 font-mono">Profile Link</span>
+              <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-white hover:text-emerald-400 mt-1 truncate max-w-full">
+                shorturl.at/XmhQ3
+              </a>
+              <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="mt-3 text-xs font-mono text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Open URL</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Direct Quick Message Form -->
+          <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-4 max-w-xl mx-auto bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
+            <h4 class="text-sm font-semibold text-slate-300 font-mono mb-2">SEND A DIRECT MESSAGE</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input type="text" id="senderName" required placeholder="Your Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" />
+              </div>
+              <div>
+                <input type="email" id="senderEmail" required placeholder="Your Email" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" />
+              </div>
+            </div>
+            <div>
+              <textarea id="senderMsg" rows="3" required placeholder="Your Message or Project Query..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-semibold text-sm transition-all shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Send Message</span>
+            </button>
+            <div id="formFeedback" class="hidden text-center text-xs font-mono text-emerald-400 pt-1">
+              Thank you! Your email client has been prepared.
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Abhinav Semwal &bull; Portfolio 2026</span>
+        </div>
+        <div>
+          Graphic Era Deemed To Be University &bull; B.Tech CSE
+        </div>
+        <div class="flex items-center gap-4">
+          <button onclick="openResumeModal()" class="hover:text-indigo-400 transition-colors flex items-center gap-1">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+            <span>Resume</span>
+          </button>
+          <span>&bull;</span>
+          <a href="#hero" class="hover:text-white transition-colors">Back to Top &uarr;</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Resume Modal (View & Download) -->
+  <div id="resumeModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/80 backdrop-blur-sm p-4 sm:p-6 md:p-10 flex items-center justify-center transition-all duration-300">
+    <div class="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[92vh] flex flex-col">
+      
+      <!-- Modal Top Action Bar -->
+      <div class="no-print p-4 sm:px-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-4 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Curriculum Vitae &bull; Abhinav Semwal</h3>
+            <p class="text-xs text-slate-400 font-mono">Official Resume Preview</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Download / Save Button -->
+          <a href="resume.pdf" download="Abhinav_Semwal_Resume.pdf" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm transition-colors" title="Download PDF File">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Download PDF</span>
+          </a>
+          <!-- Print Button -->
+          <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors" title="Print or Save as PDF">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Print</span>
+          </button>
+          <!-- Close Button -->
+          <button onclick="closeResumeModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" aria-label="Close modal">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Exact Resume Document Content -->
+      <div id="resumePrintArea" class="p-6 sm:p-10 overflow-y-auto bg-white text-slate-900 font-sans text-sm selection:bg-indigo-100 selection:text-indigo-900 leading-normal">
+        
+        <!-- Header -->
+        <div class="text-center pb-5 border-b-2 border-slate-900">
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 uppercase font-sans">
+            Abhinav Semwal
+          </h1>
+          <div class="mt-2.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-700 font-mono">
+            <span>+91 7017892829</span>
+            <span class="text-slate-400">|</span>
+            <a href="mailto:absemwal2007@gmail.com" class="text-slate-900 font-medium hover:underline">absemwal2007@gmail.com</a>
+            <span class="text-slate-400">|</span>
+            <a href="https://shorturl.at/XmhQ3" target="_blank" rel="noopener noreferrer" class="text-blue-700 font-medium underline">shorturl.at/XmhQ3</a>
+          </div>
+        </div>
+
+        <!-- Section: Education -->
+        <div class="mt-6">
+          <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3">
+            Education
+          </h2>
+          <div class="space-y-3.5">
+            <div>
+              <div class="flex justify-between items-baseline font-bold text-slate-950">
+                <span>Graphic Era Deemed To Be University, Dehradun</span>
+                <span class="text-xs font-mono font-semibold text-slate-600">2025 – present</span>
+              </div>
+              <div class="flex justify-between items-baseline text-xs text-slate-800 mt-0.5">
+                <span>B.Tech in Computer Science & Engineering</span>
+                <span class="font-bold text-slate-950 font-mono">9.56/10 CGPA</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-baseline font-bold text-slate-950">
+                <span>St. Jude's School &mdash; ISC</span>
+                <span class="text-xs font-mono font-semibold text-slate-600">2025</span>
+              </div>
+              <div class="flex justify-between items-baseline text-xs text-slate-800 mt-0.5">
+                <span>Senior School Certificate (Class XII)</span>
+                <span class="font-bold text-slate-950 font-mono">96%</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-baseline font-bold text-slate-950">
+                <span>St. Jude's School &mdash; ICSE</span>
+                <span class="text-xs font-mono font-semibold text-slate-600">2023</span>
+              </div>
+              <div class="flex justify-between items-baseline text-xs text-slate-800 mt-0.5">
+                <span>Secondary School Certificate (Class X)</span>
+                <span class="font-bold text-slate-950 font-mono">98%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Projects -->
+        <div class="mt-6">
+          <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3">
+            Projects
+          </h2>
+          <div>
+            <div class="flex justify-between items-baseline font-bold text-slate-950">
+              <span>Unit Convertor Project</span>
+              <span class="text-xs font-mono font-semibold text-slate-600">Feb 2026 – May 2026</span>
+            </div>
+            <ul class="list-disc list-outside ml-4 mt-1.5 space-y-1 text-xs text-slate-800">
+              <li>A project used to convert units of different quantities such as length, mass, weight, and currency.</li>
+              <li>Built using the C programming language, developed with VS Code as the IDE.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section: Technical Skills -->
+        <div class="mt-6">
+          <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3">
+            Technical Skills
+          </h2>
+          <div class="text-xs text-slate-800 space-y-1.5">
+            <div>
+              <span class="font-bold text-slate-950">Languages:</span> C, Java, C++
+            </div>
+            <div>
+              <span class="font-bold text-slate-950">Developer Tools:</span> VS Code, GitHub
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Scholastic and Co-Scholastic Achievements -->
+        <div class="mt-6">
+          <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3">
+            Scholastic and Co-Scholastic Achievements
+          </h2>
+          <ul class="list-disc list-outside ml-4 text-xs text-slate-800 space-y-2">
+            <li>Participated in various inter and school quiz events and group discussions.</li>
+            <li>
+              Brought laurels for school in the following events:
+              <ul class="list-[circle] list-outside ml-4 mt-1 space-y-1">
+                <li><strong class="text-slate-950">Colonel Brown Inter School Sports Quiz</strong> &mdash; 1st Position (2023 & 2024)</li>
+                <li><strong class="text-slate-950">Quintessence Inter School Quiz</strong> &mdash; 1st Position (2024)</li>
+                <li><strong class="text-slate-950">Llewelyn Inter School Quiz</strong> &mdash; 1st Position (2024)</li>
+                <li><strong class="text-slate-950">Spectrum Inter School Quiz</strong> &mdash; 1st Position (2024)</li>
+              </ul>
+            </li>
+            <li>
+              Completed the following technical certifications:
+              <ul class="list-[circle] list-outside ml-4 mt-1 space-y-1">
+                <li>Introduction to Artificial Intelligence (IBM, via Coursera)</li>
+                <li>Generative AI: Introduction and Applications (IBM, via Coursera)</li>
+                <li>Generative AI: Prompt Engineering Basics (IBM, via Coursera)</li>
+                <li>Google AI Essentials (Google, via Coursera)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Helper Notice -->
+      <div class="no-print p-3.5 bg-slate-950 border-t border-slate-800 text-center text-xs text-slate-400 font-mono">
+        Tip: Press <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-white">Ctrl + P</kbd> / Print to generate a fresh high-resolution PDF copy.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 px-4 py-3 rounded-xl bg-indigo-600 text-white font-mono text-xs shadow-2xl flex items-center gap-2 pointer-events-none">
+    <i data-lucide="check" class="w-4 h-4"></i>
+    <span id="toastMsg">Copied!</span>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Navigation Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileMenu) mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Resume Modal Controls
+    const resumeModal = document.getElementById('resumeModal');
+    function openResumeModal() {
+      if (resumeModal) {
+        resumeModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    function closeResumeModal() {
+      if (resumeModal) {
+        resumeModal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeResumeModal();
+      }
+    });
+
+    // Close modal when clicking outside modal content
+    if (resumeModal) {
+      resumeModal.addEventListener('click', (e) => {
+        if (e.target === resumeModal) {
+          closeResumeModal();
+        }
+      });
+    }
+
+    // Toast Notification helper
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (toast && toastMsg) {
+        toastMsg.textContent = message;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 2500);
+      }
+    }
+
+    // Safe Clipboard Copy function using execCommand fallback
+    function copyToClipboard(text, btnElement) {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      tempInput.style.position = 'fixed';
+      tempInput.style.opacity = '0';
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showToast('Copied: ' + text);
+        } else {
+          showToast('Failed to copy');
+        }
+      } catch (err) {
+        showToast('Copied: ' + text);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    // Contact Form Handler
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('senderName').value;
+      const email = document.getElementById('senderEmail').value;
+      const msg = document.getElementById('senderMsg').value;
+
+      const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`);
+      
+      // Open native mailto
+      window.location.href = `mailto:absemwal2007@gmail.com?subject=${subject}&body=${body}`;
+      
+      const feedback = document.getElementById('formFeedback');
+      if (feedback) {
+        feedback.classList.remove('hidden');
+        setTimeout(() => {
+          feedback.classList.add('hidden');
+        }, 5000);
+      }
+    }
+
+    // Unit Converter Engine
+    const unitConfigs = {
+      length: {
+        units: ['Meters', 'Kilometers', 'Centimeters', 'Feet', 'Inches', 'Miles'],
+        factors: {
+          'Meters': 1,
+          'Kilometers': 1000,
+          'Centimeters': 0.01,
+          'Feet': 0.3048,
+          'Inches': 0.0254,
+          'Miles': 1609.34
+        }
+      },
+      mass: {
+        units: ['Kilograms', 'Grams', 'Pounds', 'Ounces', 'Tonnes'],
+        factors: {
+          'Kilograms': 1,
+          'Grams': 0.001,
+          'Pounds': 0.45359237,
+          'Ounces': 0.0283495,
+          'Tonnes': 1000
+        }
+      },
+      currency: {
+        units: ['INR (₹)', 'USD ($)', 'EUR (€)', 'GBP (£)', 'AED (د.إ)'],
+        factors: {
+          'INR (₹)': 1,
+          'USD ($)': 83.50,
+          'EUR (€)': 90.20,
+          'GBP (£)': 105.40,
+          'AED (د.إ)': 22.74
+        }
+      },
+      temp: {
+        units: ['Celsius', 'Fahrenheit', 'Kelvin'],
+        special: true
+      }
+    };
+
+    let activeCategory = 'length';
+    const convertInput = document.getElementById('convertInput');
+    const fromUnitSelect = document.getElementById('fromUnit');
+    const toUnitSelect = document.getElementById('toUnit');
+    const convertOutput = document.getElementById('convertOutput');
+    const conversionFormula = document.getElementById('conversionFormula');
+
+    function populateDropdowns(category) {
+      if (!fromUnitSelect || !toUnitSelect) return;
+      const config = unitConfigs[category];
+      fromUnitSelect.innerHTML = '';
+      toUnitSelect.innerHTML = '';
+
+      config.units.forEach((u) => {
+        const opt1 = document.createElement('option');
+        opt1.value = u;
+        opt1.textContent = u;
+        fromUnitSelect.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = u;
+        opt2.textContent = u;
+        toUnitSelect.appendChild(opt2);
+      });
+
+      fromUnitSelect.selectedIndex = 0;
+      toUnitSelect.selectedIndex = config.units.length > 1 ? 1 : 0;
+      calculateConversion();
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.category-tab').forEach(t => {
+        t.classList.remove('bg-indigo-600', 'text-white', 'font-semibold');
+        t.classList.add('hover:text-white');
+      });
+
+      const activeBtn = document.getElementById(`tab-${cat}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'font-semibold');
+        activeBtn.classList.remove('hover:text-white');
+      }
+
+      populateDropdowns(cat);
+    }
+
+    function swapUnits() {
+      const curFrom = fromUnitSelect.value;
+      fromUnitSelect.value = toUnitSelect.value;
+      toUnitSelect.value = curFrom;
+      calculateConversion();
+    }
+
+    function calculateConversion() {
+      if (!convertInput || !convertOutput || !conversionFormula) return;
+      const val = parseFloat(convertInput.value);
+      if (isNaN(val)) {
+        convertOutput.textContent = '0.00';
+        conversionFormula.textContent = 'Please enter a valid numeric value';
+        return;
+      }
+
+      const from = fromUnitSelect.value;
+      const to = toUnitSelect.value;
+      let result = 0;
+
+      if (activeCategory === 'temp') {
+        let inCelsius = val;
+        if (from === 'Fahrenheit') inCelsius = (val - 32) * (5 / 9);
+        else if (from === 'Kelvin') inCelsius = val - 273.15;
+
+        if (to === 'Celsius') result = inCelsius;
+        else if (to === 'Fahrenheit') result = (inCelsius * 9 / 5) + 32;
+        else if (to === 'Kelvin') result = inCelsius + 273.15;
+
+        convertOutput.textContent = `${result.toFixed(2)} ${to}`;
+        conversionFormula.textContent = `${val} ${from} = ${result.toFixed(2)} ${to}`;
+      } else {
+        const factors = unitConfigs[activeCategory].factors;
+        const baseValue = val * factors[from];
+        result = baseValue / factors[to];
+
+        const formatted = result >= 10000 || (result < 0.001 && result > 0) ? result.toExponential(4) : result.toLocaleString(undefined, { maximumFractionDigits: 4 });
+        convertOutput.textContent = `${formatted} ${to}`;
+
+        const oneRatio = (factors[from] / factors[to]).toFixed(4);
+        conversionFormula.textContent = `1 ${from} ≈ ${oneRatio} ${to}`;
+      }
+    }
+
+    if (convertInput) convertInput.addEventListener('input', calculateConversion);
+    if (fromUnitSelect) fromUnitSelect.addEventListener('change', calculateConversion);
+    if (toUnitSelect) toUnitSelect.addEventListener('change', calculateConversion);
+
+    // Initial setup
+    populateDropdowns('length');
+  </script>
+</body>
+</html>
